@@ -22,7 +22,8 @@ public extension Bundle
         public static let devicePairingString = "ALTPairingFile"
         public static let urlTypes = "CFBundleURLTypes"
         public static let exportedUTIs = "UTExportedTypeDeclarations"
-        
+        public static let backgroundModes = "UIBackgroundModes"
+
         public static let untetherURL = "ALTFugu14UntetherURL"
         public static let untetherRequired = "ALTFugu14UntetherRequired"
         public static let untetherMinimumiOSVersion = "ALTFugu14UntetherMinimumVersion"
@@ -36,17 +37,17 @@ public extension Bundle
         let infoPlistURL = self.bundleURL.appendingPathComponent("Info.plist")
         return infoPlistURL
     }
-    
+
     var provisioningProfileURL: URL {
         let provisioningProfileURL = self.bundleURL.appendingPathComponent("embedded.mobileprovision")
         return provisioningProfileURL
     }
-    
+
     var certificateURL: URL {
         let certificateURL = self.bundleURL.appendingPathComponent("ALTCertificate.p12")
         return certificateURL
     }
-    
+
     var altstorePlistURL: URL {
         let altstorePlistURL = self.bundleURL.appendingPathComponent("AltStore.plist")
         return altstorePlistURL
@@ -60,12 +61,12 @@ public extension Bundle
     var appGroups: [String] {
         return self.infoDictionary?[Bundle.Info.appGroups] as? [String] ?? []
     }
-    
-    var altstoreAppGroup: String? {        
+
+    var altstoreAppGroup: String? {
         let appGroup = self.appGroups.first { $0.contains(Bundle.baseAltStoreAppGroupID) }
         return appGroup
     }
-    
+
     var completeInfoDictionary: [String : Any]? {
         let infoPlistURL = self.infoPlistURL
         return NSDictionary(contentsOf: infoPlistURL) as? [String : Any]

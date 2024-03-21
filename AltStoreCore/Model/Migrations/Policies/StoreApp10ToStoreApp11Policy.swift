@@ -15,45 +15,45 @@ fileprivate extension NSManagedObject
         let bundleID = self.value(forKey: #keyPath(StoreApp.bundleIdentifier)) as? String
         return bundleID
     }
-    
+
     var storeAppSourceID: String? {
         let sourceID = self.value(forKey: #keyPath(StoreApp.sourceIdentifier)) as? String
         return sourceID
     }
-    
+
     var storeAppVersion: String? {
         let version = self.value(forKey: #keyPath(StoreApp._version)) as? String
         return version
     }
-    
+
     var storeAppVersionDate: Date? {
         let versionDate = self.value(forKey: #keyPath(StoreApp._versionDate)) as? Date
         return versionDate
     }
-    
+
     var storeAppVersionDescription: String? {
         let versionDescription = self.value(forKey: #keyPath(StoreApp._versionDescription)) as? String
         return versionDescription
     }
-    
+
     var storeAppSize: NSNumber? {
         let size = self.value(forKey: #keyPath(StoreApp._size)) as? NSNumber
         return size
     }
-    
+
     var storeAppDownloadURL: URL? {
         let downloadURL = self.value(forKey: #keyPath(StoreApp._downloadURL)) as? URL
         return downloadURL
     }
-    
+
     func setStoreAppLatestVersion(_ appVersion: NSManagedObject)
     {
-        self.setValue(appVersion, forKey: #keyPath(StoreApp.latestVersion))
-        
+        self.setValue(appVersion, forKey: #keyPath(StoreApp.latestSupportedVersion))
+
         let versions = NSOrderedSet(array: [appVersion])
         self.setValue(versions, forKey: #keyPath(StoreApp._versions))
     }
-    
+
     class func makeAppVersion(version: String,
                               date: Date,
                               localizedDescription: String?,
@@ -81,7 +81,7 @@ class StoreApp10ToStoreApp11Policy: NSEntityMigrationPolicy
     override func createDestinationInstances(forSource sInstance: NSManagedObject, in mapping: NSEntityMapping, manager: NSMigrationManager) throws
     {
         try super.createDestinationInstances(forSource: sInstance, in: mapping, manager: manager)
-        
+
         guard let appBundleID = sInstance.storeAppBundleID,
               let sourceID = sInstance.storeAppSourceID,
               let version = sInstance.storeAppVersion,
@@ -90,12 +90,12 @@ class StoreApp10ToStoreApp11Policy: NSEntityMigrationPolicy
               let downloadURL = sInstance.storeAppDownloadURL,
               let size = sInstance.storeAppSize as? Int64
         else { return }
-        
+
         guard
             let destinationStoreApp = manager.destinationInstances(forEntityMappingName: mapping.name, sourceInstances: [sInstance]).first,
             let context = destinationStoreApp.managedObjectContext
         else { fatalError("A destination StoreApp and its managedObjectContext must exist.") }
-        
+
         let appVersion = NSManagedObject.makeAppVersion(
             version: version,
             date: versionDate,
@@ -105,7 +105,7 @@ class StoreApp10ToStoreApp11Policy: NSEntityMigrationPolicy
             appBundleID: appBundleID,
             sourceID: sourceID,
             in: context)
-        
+
         destinationStoreApp.setStoreAppLatestVersion(appVersion)
     }
 }

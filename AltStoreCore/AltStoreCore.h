@@ -18,10 +18,11 @@ FOUNDATION_EXPORT const unsigned char AltStoreCoreVersionString[];
 
 #import <AltStoreCore/ALTAppPermission.h>
 #import <AltStoreCore/ALTSourceUserInfoKey.h>
-#import <AltStoreCore/ALTPatreonBenefitType.h>
+#import <AltStoreCore/ALTPatreonBenefitID.h>
 
 // Shared
 #import <AltStoreCore/ALTConstants.h>
 #import <AltStoreCore/ALTConnection.h>
+#import <AltStoreCore/ALTWrappedError.h>
 #import <AltStoreCore/NSError+ALTServerError.h>
 #import <AltStoreCore/CFNotificationName+AltStore.h>
